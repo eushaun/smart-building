@@ -26,6 +26,8 @@ import sys
 import os
 import datetime
 import sklearn
+import re
+import ast
 
 
 # import the function written by the student
@@ -76,8 +78,8 @@ class SmartBuildingSimulatorExample:
         self.num_lights = 35
         self.num_people = 20 
         self.start_time = datetime.time(hour=8,minute=0)
-        self.end_time = datetime.time(17,0)
-        self.time_step = datetime.timedelta(minutes=2) # 2 minute resolution
+        self.end_time = datetime.time(18,0)
+        self.time_step = datetime.timedelta(seconds=15) # 15 second
         
         self.current_time = self.start_time
 
@@ -151,8 +153,7 @@ class SmartBuildingSimulatorExample:
         for sensor in self.reliable_motion_sensors + self.unreliable_motion_sensors:
             sensor_data[sensor.name] = current_data[sensor.name]
         for robot in self.robot_sensors:
-            robot.timestep(self)
-            sensor_data[robot.name] = current_data[sensor.name]
+            sensor_data[robot.name] = current_data[robot.name]
         for sensor in self.door_sensors:
             sensor_data[sensor.name] = current_data[sensor.name]
 
@@ -191,4 +192,5 @@ sensor_data = simulator.timestep()
 for i in range(len(simulator.data)-1):
     actions_dict = get_action(sensor_data)
     sensor_data = simulator.timestep(actions_dict)
+
 print(f"Total cost for the day: {simulator.cost} cents")
