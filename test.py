@@ -31,7 +31,7 @@ import ast
 
 
 # import the function written by the student
-from example_solution import get_action
+from solution import get_action
 
 # simulator code
 class Person:    
@@ -183,7 +183,6 @@ class SmartBuildingSimulatorExample:
             else:
                 raise Exception("Invalid light state")
         return cost
-
 
 
 simulator = SmartBuildingSimulatorExample()
