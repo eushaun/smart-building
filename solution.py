@@ -4,7 +4,7 @@ This file is the example code to show how the assignment will be tested.
 
 Name: Eu Shaun Lim      zID: z5156345
 
-Name: Utkarsh Gulumkar  zID:
+Name: Utkarsh Gulumkar  zID: z5287077
 '''
 
 # Make division default to floating-point, saving confusion
@@ -14,23 +14,11 @@ from __future__ import print_function
 # Allowed libraries 
 import numpy as np
 import pandas as pd
-import scipy as sp
-import scipy.special
-import heapq as pq
-import matplotlib as mp
-import matplotlib.pyplot as plt
 import math
 from itertools import product, combinations
 from collections import OrderedDict as odict
-import collections
-from graphviz import Digraph, Graph
-from tabulate import tabulate
 import copy
-import sys
-import os
 import datetime
-import sklearn
-import ast
 import re
 
 # external python files
@@ -49,6 +37,13 @@ from particle_filtering import simulate, get_pf_actions
 # this global state variable demonstrates how to keep track of information over multiple 
 # calls to get_action 
 state = initial_state()
+# training data for on-the-fly learning
+data = pd.read_csv('data.csv')
+df = data.drop(['reliable_sensor1','reliable_sensor2','reliable_sensor3','reliable_sensor4',
+                'unreliable_sensor1','unreliable_sensor2','unreliable_sensor3','unreliable_sensor4',
+                'robot1','robot2','door_sensor1','door_sensor2','door_sensor3','door_sensor4',
+                'electricity_price','Unnamed: 0'], axis=1)
+df = df.set_index('time')
 
 # sample number of workers from Normal distribution
 num_ppl = np.int32(np.round(np.random.normal(20, 1)))
@@ -77,9 +72,9 @@ def update_robot_actions(actions_dict, sensor_data):
     return new_actions
 
 def get_action(sensor_data):
-
     # declare state as a global variable so it can be read and modified within this function
     global state
+    global df
 
     # if sensor reports None, assume there is motion
     for sensor, val in sensor_data.items():
@@ -87,7 +82,7 @@ def get_action(sensor_data):
             sensor_data[sensor] = 'motion'
 
     # particle filtering for each time step
-    simulate(state)
+    simulate(state, df, str(sensor_data['time']))
     actions_dict = get_pf_actions(state)
 
     # hidden markov model for the rooms with sensors
