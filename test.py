@@ -10,24 +10,13 @@ from __future__ import print_function
 # Allowed libraries 
 import numpy as np
 import pandas as pd
-import scipy as sp
-import scipy.special
-import heapq as pq
-import matplotlib as mp
-import matplotlib.pyplot as plt
 import math
 from itertools import product, combinations
 from collections import OrderedDict as odict
-import collections
-from graphviz import Digraph, Graph
-from tabulate import tabulate
 import copy
-import sys
-import os
 import datetime
-import sklearn
 import re
-import ast
+import pickle
 
 
 # import the function written by the student
